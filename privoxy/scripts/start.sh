@@ -3,6 +3,7 @@
 # Source our persisted env variables from container startup
 # shellcheck source=/dev/null
 . /etc/transmission/environment-variables.sh
+. /etc/sabnzbd/environment-variables.sh
 
 set_port()
 {

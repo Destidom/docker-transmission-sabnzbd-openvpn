@@ -42,6 +42,7 @@ echo "Network is up"
 #Expected output is 2 for both checks, 1 for process and 1 for grep
 OPENVPN=$(pgrep openvpn | wc -l )
 TRANSMISSION=$(pgrep transmission | wc -l)
+SABNZBD=$(pgrep sabnzbdplus | wc -l)
 
 if [[ ${OPENVPN} -ne 1 ]]; then
 	echo "Openvpn process not running"
@@ -51,6 +52,10 @@ if [[ ${TRANSMISSION} -ne 1 ]]; then
 	echo "transmission-daemon process not running"
 	exit 1
 fi
+if [[ ${SABNZBD} -ne 1 ]]; then
+	echo "sabnzbdplus process not running"
+	exit 1
+fi
 
-echo "Openvpn and transmission-daemon processes are running"
+echo "Openvpn, transmission-daemon and sabnzbdplus processes are running"
 exit 0

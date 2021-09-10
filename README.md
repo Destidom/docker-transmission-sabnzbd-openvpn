@@ -1,4 +1,4 @@
-# OpenVPN and Transmission with WebUI
+# OpenVPN, Transmission and Sabnzbdplus with WebUI
 
 [![CircleCI builds](https://img.shields.io/circleci/build/github/haugene/docker-transmission-openvpn)](https://circleci.com/gh/haugene/docker-transmission-openvpn)
 [![Docker Pulls](https://img.shields.io/docker/pulls/haugene/transmission-openvpn.svg)](https://hub.docker.com/r/haugene/transmission-openvpn/)

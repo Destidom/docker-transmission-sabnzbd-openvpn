@@ -25,7 +25,7 @@ COPY --from=TransmissionUIs /opt/transmission-ui /opt/transmission-ui
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
-    dumb-init openvpn transmission-daemon transmission-cli privoxy \
+    dumb-init openvpn transmission-daemon transmission-cli sabnzbdplus privoxy \
     tzdata dnsutils iputils-ping ufw openssh-client git jq curl wget unrar unzip bc \
     && ln -s /usr/share/transmission/web/style /opt/transmission-ui/transmission-web-control \
     && ln -s /usr/share/transmission/web/images /opt/transmission-ui/transmission-web-control \
@@ -40,6 +40,7 @@ RUN apt-get update && apt-get install -y \
 # Add configuration and scripts
 ADD openvpn/ /etc/openvpn/
 ADD transmission/ /etc/transmission/
+ADD sabnzbd /etc/sabnzbd/
 ADD scripts /etc/scripts/
 ADD privoxy/scripts /opt/privoxy/
 
@@ -47,11 +48,16 @@ ENV OPENVPN_USERNAME=**None** \
     OPENVPN_PASSWORD=**None** \
     OPENVPN_PROVIDER=**None** \
     GLOBAL_APPLY_PERMISSIONS=true \
-    TRANSMISSION_HOME=/data/transmission-home \
+    TRANSMISSION_HOME=/data/transmission \
     TRANSMISSION_RPC_PORT=9091 \
-    TRANSMISSION_DOWNLOAD_DIR=/data/completed \
-    TRANSMISSION_INCOMPLETE_DIR=/data/incomplete \
-    TRANSMISSION_WATCH_DIR=/data/watch \
+    TRANSMISSION_DOWNLOAD_DIR=/data/transmission/download-dir \
+    TRANSMISSION_INCOMPLETE_DIR=/data/incomplete-dir \
+    TRANSMISSION_WATCH_DIR=/data/watch-dir \
+    SABNZBD_HOME=/data/sabnzbdplus \
+    SABNZBD_DIRSCAN_DIR=/data/sabnzbd/dirscan-dir \
+    SABNZBD_DOWNLOAD_DIR=/data/sabnzbd/download-dir \
+    SABNZBD_COMPLETE_DIR=/data/sabnzbd/complete-dir \
+    SABNZBD_SCRIPT_DIR=/data/sabnzbd/script-dir  \
     CREATE_TUN_DEVICE=true \
     ENABLE_UFW=false \
     UFW_ALLOW_GW_NET=false \
@@ -76,7 +82,7 @@ HEALTHCHECK --interval=1m CMD /etc/scripts/healthcheck.sh
 ARG REVISION
 # Set env from build argument or default to empty string
 ENV REVISION=${REVISION:-""}
-LABEL org.opencontainers.image.source=https://github.com/haugene/docker-transmission-openvpn
+LABEL org.opencontainers.image.source=https://github.com/hvos234/docker-transmission-sabnzbdplus-openvpn
 LABEL org.opencontainers.image.revision=$REVISION
 
 # Compatability with https://hub.docker.com/r/willfarrell/autoheal/

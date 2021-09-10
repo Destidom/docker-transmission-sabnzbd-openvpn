@@ -49,6 +49,7 @@ if [[ "${PEER_DNS,,}" == "true" ]]; then
 fi
 
 /etc/transmission/start.sh "$@"
+/etc/sabnzbd/start.sh "$@"
 [[ -f /opt/privoxy/start.sh && -x /opt/privoxy/start.sh ]] && /opt/privoxy/start.sh
 
 exit 0
