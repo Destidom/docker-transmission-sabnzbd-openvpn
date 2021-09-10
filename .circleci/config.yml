@@ -13,9 +13,9 @@ workflows:
   build-docker-images:
     jobs:
       - build-with-buildx:
-          name: build-transmission-openvpn-images
+          name: build-transmission-sabnzbd-openvpn-images
           context: dockerhub
-          image-name: haugene/transmission-openvpn
+          image-name: hvos234/docker-transmission-sabnzbdplus-openvpn
           build-context: "."
           filters:
             branches:

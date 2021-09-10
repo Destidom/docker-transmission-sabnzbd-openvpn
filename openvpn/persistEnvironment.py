@@ -29,6 +29,8 @@ variables_to_persist = {}
 for env_var in os.environ:
     if env_var.startswith('TRANSMISSION_'):
         variables_to_persist[env_var] = os.environ.get(env_var)
+    elif env_var.startswith('SABNZBD_'):
+        variables_to_persist[env_var] = os.environ.get(env_var)
     elif env_var.startswith('TR_'):
         variables_to_persist[env_var] = os.environ.get(env_var)
     elif env_var.startswith('WEBPROXY_'):

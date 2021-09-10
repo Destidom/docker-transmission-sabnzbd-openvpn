@@ -53,11 +53,12 @@ ENV OPENVPN_USERNAME=**None** \
     TRANSMISSION_DOWNLOAD_DIR=/data/transmission/download-dir \
     TRANSMISSION_INCOMPLETE_DIR=/data/incomplete-dir \
     TRANSMISSION_WATCH_DIR=/data/watch-dir \
-    SABNZBD_HOME=/data/sabnzbdplus \
+    SABNZBD_HOME=/data/sabnzbd \
     SABNZBD_DIRSCAN_DIR=/data/sabnzbd/dirscan-dir \
     SABNZBD_DOWNLOAD_DIR=/data/sabnzbd/download-dir \
     SABNZBD_COMPLETE_DIR=/data/sabnzbd/complete-dir \
     SABNZBD_SCRIPT_DIR=/data/sabnzbd/script-dir  \
+    SABNZBD_RPC_PORT=8080 \
     CREATE_TUN_DEVICE=true \
     ENABLE_UFW=false \
     UFW_ALLOW_GW_NET=false \
@@ -92,6 +93,7 @@ LABEL autoheal=true
 
 #Transmission-RPC
 EXPOSE 9091
+EXPOSE 8080
 # Privoxy
 EXPOSE 8118
 

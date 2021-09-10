@@ -42,7 +42,7 @@ else:
 
 # Read config base
 with open(configuration_baseline, 'r') as input_file:
-    settings_dict = json.load(input_file)
+    settings_lines = input_file.readlines()
 
 
 def setting_as_env(setting: str) -> str:
@@ -53,39 +53,22 @@ def setting_as_env(setting: str) -> str:
 
 
 # For each setting, check if an environment variable is set to override it
-for setting in settings_dict:
-    setting_is_sensitive = setting == "rpc-password"
-    setting_env_name = setting_as_env(setting)
-    if setting_env_name in os.environ:
-        env_value = os.environ.get(setting_env_name)
-        env_log_value = "[REDACTED]" if setting_is_sensitive else env_value
-
-        # Coerce env var values to the expected type in sabnzbd.ini
-        if type(settings_dict[setting]) == bool:
-            env_value = env_value.lower() == 'true'
+settings_replacement = ""
+for index, line in enumerate(settings_lines):
+    # if it contains [ skip it
+    if line.find('[') != -1:
+        settings_replacement = settings_replacement + line + "\n"
+    else:
+        setting = line.split(' = ')[0]
+        value = line.split(' = ')[1]
+        setting_env_name = setting_as_env(setting)
+        # if setting exists
+        if setting_env_name in os.environ:
+            env_value = os.environ.get(setting_env_name)
+            settings_replacement = settings_replacement + setting_env_name + " = " + env_value + "\n"
         else:
-            setting_type = type(settings_dict[setting])
-            try:
-                env_value = setting_type(env_value)
-            except ValueError:
-                print(
-                    'Could not coerce {setting_env_name} value {env_log_value} to expected type {setting_type}'.format(
-                    setting_env_name=setting_env_name,
-                    env_log_value=env_log_value,
-                    setting_type=setting_type,
-                    ),
-                )
-                raise
-
-        print(
-            'Overriding {setting} because {env_name} is set to {value}'.format(
-                setting=setting,
-                env_name=setting_env_name,
-                value=env_log_value,
-            ),
-        )
-        settings_dict[setting] = env_value
+            settings_replacement = settings_replacement + line + "\n"
 
 # Dump resulting settings to file
-#with open(sabnzbd_settings, 'w') as fp:
-#    json.dump(settings_dict, fp)
+with open(sabnzbd_settings, 'w') as fp:
+    fp.write(settings_replacement)

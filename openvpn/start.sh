@@ -168,6 +168,7 @@ echo "${TRANSMISSION_RPC_PASSWORD}" >> /config/transmission-credentials.txt
 
 # Persist transmission settings for use by transmission-daemon
 python3 /etc/openvpn/persistEnvironment.py /etc/transmission/environment-variables.sh
+python3 /etc/openvpn/persistEnvironment.py /etc/sabnzbd/environment-variables.sh
 
 TRANSMISSION_CONTROL_OPTS="--script-security 2 --up-delay --up /etc/openvpn/tunnelUp.sh --route-pre-down /etc/openvpn/tunnelDown.sh"
 
@@ -227,8 +228,10 @@ if [[ "${ENABLE_UFW,,}" == "true" ]]; then
   fi
   if [[ "${UFW_ALLOW_GW_NET,,}" == "true" ]]; then
     ufwAllowPortLong TRANSMISSION_RPC_PORT GW_CIDR
+    ufwAllowPortLong SABNZBD_RPC_PORT GW_CIDR
   else
     ufwAllowPortLong TRANSMISSION_RPC_PORT GW
+    ufwAllowPortLong SABNZBD_RPC_PORT GW
   fi
 
   if [[ -n "${UFW_EXTRA_PORTS-}"  ]]; then
@@ -249,6 +252,7 @@ if [[ -n "${LOCAL_NETWORK-}" ]]; then
       /sbin/ip route add "${localNet}" via "${GW}" dev "${INT}"
       if [[ "${ENABLE_UFW,,}" == "true" ]]; then
         ufwAllowPortLong TRANSMISSION_RPC_PORT localNet
+        ufwAllowPortLong SABNZBD_RPC_PORT localNet
         if [[ -n "${UFW_EXTRA_PORTS-}" ]]; then
           for port in ${UFW_EXTRA_PORTS//,/ }; do
             ufwAllowPortLong port localNet

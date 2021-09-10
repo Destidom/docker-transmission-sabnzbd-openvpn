@@ -1,6 +1,6 @@
-site_name: docker-transmission-openvpn
-site_url: http://haugene.github.io/docker-transmission-openvpn/
-repo_url: https://github.com/haugene/docker-transmission-openvpn/
+site_name: docker-transmission-sabnzbd-openvpn
+site_url: https://github.com/hvos234/docker-transmission-sabnzbd-openvpn/
+repo_url: https://github.com/hvos234/docker-transmission-sabnzbd-openvpn/
 theme:
   name: 'material'
 markdown_extensions:
