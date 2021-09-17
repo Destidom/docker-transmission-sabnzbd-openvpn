@@ -51,13 +51,21 @@ def setting_as_env(setting: str) -> str:
         setting=setting.upper().replace('-', '_'),
     )
 
+# Add a new environment variable as test
+#os.environ['SABNZBD_HOME'] = '/data/sabnzbd'
+#os.environ['SABNZBD_DIRSCAN_DIR'] = '/data/sabnzbd/dirscan-dir'
+#os.environ['SABNZBD_DOWNLOAD_DIR'] = '/data/sabnzbd/download-dir'
+#os.environ['SABNZBD_COMPLETE_DIR'] = '/data/sabnzbd/complete-dir'
+#os.environ['SABNZBD_SCRIPT_DIR'] = '/data/sabnzbd/script-dir'
+#os.environ['SABNZBD_RPC_PORT'] = '8080'
 
 # For each setting, check if an environment variable is set to override it
 settings_replacement = ""
 for index, line in enumerate(settings_lines):
+    #print(line)
     # if it contains [ skip it
     if line.find('[') != -1:
-        settings_replacement = settings_replacement + line + "\n"
+        settings_replacement = settings_replacement + line
     else:
         setting = line.split(' = ')[0]
         value = line.split(' = ')[1]
@@ -65,9 +73,9 @@ for index, line in enumerate(settings_lines):
         # if setting exists
         if setting_env_name in os.environ:
             env_value = os.environ.get(setting_env_name)
-            settings_replacement = settings_replacement + setting_env_name + " = " + env_value + "\n"
+            settings_replacement = settings_replacement + setting + " = " + env_value + "\n"
         else:
-            settings_replacement = settings_replacement + line + "\n"
+            settings_replacement = settings_replacement + line
 
 # Dump resulting settings to file
 with open(sabnzbd_settings, 'w') as fp:

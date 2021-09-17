@@ -55,7 +55,7 @@ else
 fi
 
 echo "STARTING SABNZBD"
-exec su --preserve-environment ${RUN_AS} -s /bin/bash -c "/usr/bin/sabnzbdplus  -f ${SABNZBD_HOME}/sabnzbd.ini --logfile $LOGFILE" &
+exec su --preserve-environment ${RUN_AS} -s /bin/bash -c "/usr/bin/sabnzbdplus  -f ${SABNZBD_HOME}/sabnzbd.ini" &
 
 # Configure port forwarding if applicable
 if [[ -x /etc/openvpn/${OPENVPN_PROVIDER,,}/update-port.sh && -z $DISABLE_PORT_UPDATER ]]; then

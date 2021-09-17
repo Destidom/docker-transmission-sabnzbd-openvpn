@@ -2,7 +2,7 @@ FROM ruby:2-alpine
 
 # Image caching, put "never changing" layers first
 CMD ["/etc/transmission-rss/start.sh"]
-ENV TRANSMISSION_DOWNLOAD_DIR=/data/completed \
+ENV TRANSMISSION_DOWNLOAD_DIR=/data/transmission/download-dir \
     RSS_URL=**None** \
     RSS_REGEXP=
 
