@@ -42,7 +42,8 @@ without any of the envoirment variables.
 ## Documentation
 You can find the original documentation on https://haugene.github.io/docker-transmission-openvpn/
 
-## Read this first (See original documenation!)
+# Original documenation!
+## Read this first 
 
 The documentation for this image is hosed on GitHub pages:
 
