@@ -59,6 +59,8 @@ def setting_as_env(setting: str) -> str:
 #os.environ['SABNZBD_SCRIPT_DIR'] = '/data/sabnzbd/script-dir'
 #os.environ['SABNZBD_RPC_PORT'] = '8080'
 
+sensitive_settings = ["password", "growl_password", "growl_password"]
+
 # For each setting, check if an environment variable is set to override it
 settings_replacement = ""
 for index, line in enumerate(settings_lines):
@@ -73,7 +75,18 @@ for index, line in enumerate(settings_lines):
         # if setting exists
         if setting_env_name in os.environ:
             env_value = os.environ.get(setting_env_name)
+            env_log_value = env_value
+            if setting in sensitive_settings:
+                env_log_value = "[REDACTED]"
+            print(
+                'Overriding {setting} because {env_name} is set to {value}'.format(
+                    setting=setting,
+                    env_name=setting_env_name,
+                    value=env_log_value,
+                ),
+            )
             settings_replacement = settings_replacement + setting + " = " + env_value + "\n"
+            
         else:
             settings_replacement = settings_replacement + line
 

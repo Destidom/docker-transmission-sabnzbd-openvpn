@@ -7,8 +7,17 @@ It has built in support for many popular VPN providers to make the setup easier.
 ## This is a fork of 
 This is a fork of https://github.com/haugene/docker-transmission-openvpn
 I used the 4.0 release and bulid a new one 4.0-hvos234.
-I only added sabnzbdplus. See the 'sabnzbd' folder. I changed the main dockerfile file, the /openvpn/start.sh, /openvpn/tunnelDown.sh, /openvpn/tunnelUp.sh.
+I only added sabnzbdplus and extra ufw rules (when enabled). See the 'sabnzbd' folder. I changed the main dockerfile file, 
+the /openvpn/start.sh, /openvpn/tunnelDown.sh, /openvpn/tunnelUp.sh etc.
 I did not test if the privoxy works or the rss.
+
+Beside sabnzdbplus i added some firewall rules (when ENABLE_UFW=true), to make sure even when the openvpn is not started and the transmission
+daemon or sanbnzbd is, that the firewall rules block everything.
+  ufw default deny incoming
+  ufw default deny outgoing
+  ufw allow out on tun0
+  ufw allow out on eth0 to any port 53,${OPENVPN_PORT=} proto ${OPENVPN_PROTO}
+  ufw allow out on wlan0 to any port 53,${OPENVPN_PORT=} proto ${OPENVPN_PROTO}
 
 ## Run with
 sudo docker run --cap-add=NET_ADMIN -d --restart always -d \
@@ -17,13 +26,14 @@ sudo docker run --cap-add=NET_ADMIN -d --restart always -d \
               -e OPENVPN_PROVIDER=CUSTOM \
               -e OPENVPN_USERNAME=USERNAME \
               -e OPENVPN_PASSWORD=PASSWORD \
-              -e LOCAL_NETWORK=192.168.0.0/24 \
+              -e OPENVPN_PROTO=udp \
+              -e OPENVPN_PORT=1194 \
+              -e LOCAL_NETWORK=192.168.192.0/24 \
               -e TZ=NL \
               -e ENABLE_UFW=true \
-              -e TRANSMISSION_rpc-username=transmission \
-              -e TRANSMISSION_rpc-password=PASSWORD \
-              -e SABNZBD_username=sabnzbd \
-              -e SABNZBD_password=PASSWORD \
+              -e TRANSMISSION_RPC_USERNAME=transmission \
+              -e TRANSMISSION_RPC_PASSWORD=PASSWORD \
+              -e GLOBAL_APPLY_PERMISSIONS=false \
               --log-driver json-file \
               --log-opt max-size=10m \
               -p 9091:9091 \
@@ -32,8 +42,11 @@ sudo docker run --cap-add=NET_ADMIN -d --restart always -d \
               --dns 1.0.0.1 \
               hvos234/docker-transmission-sabnzbdplus-openvpn:4.0-hvos234
 
-Do not forget to change the OPENVPNFILE, USERNAME, PASSWORD and the other PASSWORD and PASSWORD.
-When you run this image, it will copy the 'default-settings.json' file to the ${TRANSMISSION_HOME}/settings.json (if not exists) 
+Do not forget to change the OPENVPNFILE, USERNAME, PASSWORD, PASSWORD and also the 192.168.192.0/24 to your situation.
+Run the container once and ajust the ${TRANSMISSION_HOME}/settings.json and the ${SABNZBD_HOME}/sabnzbd.ini to your liking!
+Do not forget to change the "APi-key" and the "NZB-key" in sabznbd!
+
+When you run this , it will copy the 'default-settings.json' file to the ${TRANSMISSION_HOME}/settings.json (if not exists) 
 and the 'default-sabnzbd.ini' files to ${SABNZBD_HOME}/sabnzbd.ini (if not exists), and replaces all the 
 envoirment variabels started with 'TRANSMISSION_' (for the settings.json) and 'SABNZBD_' (for the sabnzbd.ini) in the settings.json
 and of course the sabnzbd.ini file. You can start the a container the first time and make alterations in both files 

@@ -48,6 +48,8 @@ ADD privoxy/scripts /opt/privoxy/
 ENV OPENVPN_USERNAME=**None** \
     OPENVPN_PASSWORD=**None** \
     OPENVPN_PROVIDER=**None** \
+    OPENVPN_PROTO=udp \
+    OPENVPN_PORT=1194 \
     GLOBAL_APPLY_PERMISSIONS=true \
     TRANSMISSION_HOME=/data/transmission \
     TRANSMISSION_RPC_PORT=9091 \
